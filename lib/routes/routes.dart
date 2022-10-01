@@ -9,7 +9,7 @@ import 'package:titan_chat/pages/users_page.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
 
-  'usuarios' : ( _ ) => UsersPage(),
+  'users' : ( _ ) => UsersPage(),
   'chat'     : ( _ ) => ChatPage(),
   'login'    : ( _ ) => LoginPage(),
   'register' : ( _ ) => RegisterPage(),
