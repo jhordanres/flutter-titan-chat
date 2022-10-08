@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:titan_chat/widgets/custom_btn_azul.dart';
+import 'package:provider/provider.dart';
+import 'package:titan_chat/helpers/show_alert.dart';
 
+import 'package:titan_chat/services/auth_service.dart';
+
+import 'package:titan_chat/widgets/custom_btn_azul.dart';
 import 'package:titan_chat/widgets/custom_labels.dart';
 import 'package:titan_chat/widgets/custom_logo.dart';
 import 'package:titan_chat/widgets/custom_input.dart';
+
+
 
 class RegisterPage extends StatelessWidget {
 
@@ -59,6 +65,9 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -86,11 +95,23 @@ class __FormState extends State<_Form> {
           ),
 
           BlueButton(
-            text: 'Login', 
-            onPressed: (){
-              print(nameCtrl.text);
-              print(emailCtrl.text);
-              print(passCtrl.text);
+            text: 'Crear cuenta', 
+            onPressed: authService.authenticating ? null : () async {
+              
+              final registerOk = await authService.register(
+                nameCtrl.text.trim(), 
+                emailCtrl.text.trim(), 
+                passCtrl.text.trim()
+              );
+
+              //Pregunto si el registro es valido me lleve a la pagina de login
+              // y si no que me muestre un alerta
+              if( registerOk == true ){
+                //TODO: Conectar socket server
+                Navigator.pushReplacementNamed(context, 'users');
+              } else {
+                showAlert(context, 'Registro Invalido', registerOk);
+              }
             }
           )  
         ],
